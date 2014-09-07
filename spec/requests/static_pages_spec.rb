@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "Static pages" do
 
-  let(:base_title) { 'Ruby on Rails Tutorial Sample App'}
+  let(:base_title) { 'ROR Tut. Samp. App'}
 
   describe "Home page" do
     it "should have the content 'Sample App'" do
@@ -11,9 +11,17 @@ describe "Static pages" do
     end
     it "should have the right title" do
       visit '/static_pages/home'
-      expect(page).to have_title("#{base_title} | Home")
+      expect(page).to have_title("#{base_title}")
+      # Took out "  | Home" with addition of the full_title helper
     end
- end
+    it "should not have a custom page title" do
+      visit '/static_pages/home'
+      expect(page).not_to have_title('|')
+      # note that 'have_title' searches for a substring 
+      # not a perfect match, so the test fails if there's a '|'
+      # anywhere in the title
+    end
+  end
 
   describe "Help page" do
     it "should have the content 'Help'" do
