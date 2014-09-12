@@ -6,10 +6,21 @@ describe "Static pages" do
 
   subject { page }
 
+  shared_examples_for "all static pages" do
+    it { should have_selector('h1', text: foo) }
+    it { should have_title(full_title(bar)) }
+  end
+
   describe "Home page" do
     before { visit root_path }
 
-    it { should have_content('Sample App') }    
+ #   it { should have_content('Sample App') } 
+
+    let(:foo) { 'Sample App' }
+    let(:bar) { '' }
+    it_should_behave_like "all static pages"
+
+
     it { should have_title(full_title('')) }
     it { should_not have_title('|') }
     # the more verbose way of doing the same thing:
@@ -51,4 +62,19 @@ describe "Static pages" do
     it { should have_content('Contact Us') }
     it { should have_title(full_title('Contact Us')) }
   end
+
+  it  "should have the right links on the layout"  do
+    visit root_path
+    click_link "About"
+    expect(page).to have_title(full_title('About Us'))
+    click_link "Help"
+    expect(page).to have_title(full_title('Help'))
+    click_link "Home"
+    expect(page).to have_title(full_title(''))
+    click_link "Sign up now!"
+    expect(page).to have_title(full_title('Sign up'))
+    click_link "sample app"
+    expect(page).to have_title(full_title(''))
+  end
+
 end
