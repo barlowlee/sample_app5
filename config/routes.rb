@@ -1,8 +1,13 @@
 SampleApp5::Application.routes.draw do
   
-  get "users/new"  
+  # get "users/new"  
   # Hartl says this is necessary,
-  # but it works when it's commented out, so I don't understand
+  # but I don't understand why, unless we manually navigate
+  # to localhost:3000/users/new
+  # the line becomes unnecessary when we add:
+
+  resources :users
+  # and note the plural of :users
 
 
   root 'static_pages#home'
