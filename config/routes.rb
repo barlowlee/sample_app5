@@ -8,10 +8,15 @@ SampleApp5::Application.routes.draw do
 
   resources :users
   # and note the plural of :users
-
+  resources :sessions, only: [:new, :create, :destroy]
+  # without the 'only' options, this command would 
+  #   automatically have created an entire suite of 
+  #   RESTful actions for the sessions resource
 
   root 'static_pages#home'
   match '/signup',  to: 'users#new',            via: 'get'
+  match '/signin',  to: 'sessions#new',         via: 'get'
+  match '/signout', to: 'sessions#destroy',     via: 'delete'
   match '/help',    to: 'static_pages#help',    via: 'get'
   match '/about',   to: 'static_pages#about',   via: 'get'
   match '/contact', to: 'static_pages#contact', via: 'get'

@@ -8,9 +8,9 @@ describe User do
 
 	before do
 		@user = User.new(name: "John Doe", 
-										 email: "john@example.com",
-										 password: "foobar",
-										 password_confirmation: "foobar")
+						 email: "john@example.com",
+						 password: "foobar",
+						 password_confirmation: "foobar")
 	end
 
 	subject { @user }
@@ -20,25 +20,27 @@ describe User do
 	it { should respond_to(:password_digest) }
 	it { should respond_to(:password) }
 	it { should respond_to(:password_confirmation) }
+	it { should respond_to(:remember_token) }
+	it { should respond_to(:authenticate) }
 
 	it { should be_valid }
 
-	describe "when name is not present" do
+	describe "- when name is not present" do
 		before { @user.name = "  " }
 		it { should_not be_valid }
 	end
 
-	describe "when email is not present" do
+	describe "- when email is not present" do
 		before { @user.email = "  " }
 		it { should_not be_valid }
 	end
 
-	describe "when name is too long" do
+	describe "- when name is too long" do
 		before { @user.name = "a"*51 }
 		it { should_not be_valid }
 	end
 
-	describe "when email format is funky" do
+	describe "- when email format is funky" do
 		it "should be invalid" do
 			addresses = %w[user@foo,com user_at_foo.org 
 										 example.user@foo. foo@bar_baz.com 
@@ -50,7 +52,7 @@ describe User do
 		end
 	end
 
-	describe "when email format is stellar" do
+	describe "- when email format is stellar" do
 		it "should be valid" do
 			addresses = %w[user@foo.COM A_US_ER@f.b.org 
 										 frst.lst@foo.jp a+b@baz.cn]
@@ -61,7 +63,7 @@ describe User do
 		end
 	end
 
-	describe "when email address is already taken" do
+	describe "- when email address is already taken" do
 		before do
 			user_with_same_email = @user.dup
 			user_with_same_email.email = @user.email.upcase
@@ -80,17 +82,17 @@ describe User do
 		it { should_not be_valid }
 	end
 
-	describe "when password and confirmation don't match" do
+	describe "- when password and confirmation don't match" do
 		before { @user.password_confirmation = "not foobar" }
 		it { should_not be_valid }
 	end
 
-	describe "with a password that's too short" do
+	describe "- with a password that's too short" do
 		before { @user.password = @user.password_confirmation = "a" * 5 }
 		it { should be_invalid }
 	end
 
-	describe "return value of authenticate method" do
+	describe "- return value of authenticate method" do
 		before { @user.save }
 		let(:found_user) { User.find_by(email: @user.email) }
 
@@ -103,7 +105,15 @@ describe User do
 			it { should_not eq user_for_invalid_password }
 			specify { expect(user_for_invalid_password).to be_false }
 		end
-
 	end		
 
+	describe "- upon creation must have a" do
+		before { @user.save }
+		its(:remember_token) { should_not be_blank }
+		# it { expect(@user.remember_token).not_to be_blank }
+		# accomplishes the same thing, but the symbol argument
+		# in the its cause (:remember_token) appears in the 
+		# description when the error fires, 
+		# but not when using the it { ecpect ... } syntax.
+	end
 end
