@@ -12,6 +12,7 @@ SampleApp5::Application.routes.draw do
   # without the 'only' options, this command would 
   #   automatically have created an entire suite of 
   #   RESTful actions for the sessions resource
+  resources :microposts, only: [:create, :destroy]
 
   root 'static_pages#home'
   match '/signup',  to: 'users#new',            via: 'get'

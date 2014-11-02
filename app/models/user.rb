@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-	has_many :microposts
+	has_many :microposts, dependent: :destroy
 	before_save { self.email = email.downcase }
 	before_create :create_remember_token
 		# this is a private method below, in user.rb
@@ -21,6 +21,11 @@ class User < ActiveRecord::Base
 
 	def User.digest(unhashed_token)
 		Digest::SHA1.hexdigest(unhashed_token.to_s)		
+	end
+
+	def feed
+		# This is preliminary.  See "Following Users" for full implementation
+		Micropost.where("user_id = ?", id)
 	end
 
 	private

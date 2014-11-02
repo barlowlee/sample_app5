@@ -10,6 +10,7 @@ class UsersController < ApplicationController
 
 	def show
 		@user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
 	end
 
   def new
@@ -58,12 +59,13 @@ class UsersController < ApplicationController
 
     # before filters (invoked by before_action method)
 
-    def signed_in_user
-      unless signed_in?
-        store_location
-        redirect_to signin_url, notice: "Please sign in." 
-      end
-    end
+    # This method was moved to the sessions_helper in chapter 10
+    # def signed_in_user
+    #   unless signed_in?
+    #     store_location
+    #     redirect_to signin_url, notice: "Please sign in." 
+    #   end
+    # end
 
     def correct_user
       @user = User.find(params[:id])
