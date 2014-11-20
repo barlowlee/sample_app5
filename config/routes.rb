@@ -6,13 +6,18 @@ SampleApp5::Application.routes.draw do
   # to localhost:3000/users/new
   # the line becomes unnecessary when we add:
 
-  resources :users
+  resources :users do
+    member do
+      get :following, :followers
+    end
+  end
   # and note the plural of :users
   resources :sessions, only: [:new, :create, :destroy]
   # without the 'only' options, this command would 
   #   automatically have created an entire suite of 
   #   RESTful actions for the sessions resource
   resources :microposts, only: [:create, :destroy]
+  resources :relationships, only: [:create, :destroy]
 
   root 'static_pages#home'
   match '/signup',  to: 'users#new',            via: 'get'

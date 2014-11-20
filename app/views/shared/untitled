@@ -1,0 +1,18 @@
+				<% if @user = current_user %>
+					<%= link_to "view my profile", @user %>
+				<% else %>
+					<%= link_to "view this user's profile", @user %>
+				<% end %>
+
+
+									<%= link_to "view this person's profile", @user %>
+
+
+							<h1><%= current_user %></h1>
+			<span>
+				<% if @user == current_user %>
+					<%= link_to "view my profile", @user %>
+				<% else %>
+					<%= link_to "view this user's profile", @user %>
+				<% end %>
+			</span>
